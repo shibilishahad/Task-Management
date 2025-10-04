@@ -49,7 +49,7 @@ A professional task management application built with Django, featuring role-bas
 
 ### Step 1: Clone or Download the Project
 ```bash
-cd taskkkk
+cd Task-Management
 ```
 
 ### Step 2: Create Virtual Environment (Recommended)

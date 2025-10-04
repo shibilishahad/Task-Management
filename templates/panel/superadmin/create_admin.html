@@ -1,0 +1,43 @@
+{% extends 'panel/base.html' %}
+
+{% block title %}Create Admin{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1 class="card-title">Create New Admin</h1>
+    
+    <a href="{% url 'superadmin_manage_admins' %}" class="btn btn-warning" style="margin-bottom: 1rem;">← Back to Admins</a>
+    
+    <form method="POST">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="username">Username *</label>
+            <input type="text" id="username" name="username" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email *</label>
+            <input type="email" id="email" name="email" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="password">Password *</label>
+            <input type="password" id="password" name="password" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="first_name">First Name</label>
+            <input type="text" id="first_name" name="first_name" class="form-control">
+        </div>
+        
+        <div class="form-group">
+            <label for="last_name">Last Name</label>
+            <input type="text" id="last_name" name="last_name" class="form-control">
+        </div>
+        
+        <button type="submit" class="btn btn-success">Create Admin</button>
+    </form>
+</div>
+{% endblock %}
+

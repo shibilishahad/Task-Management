@@ -1,0 +1,30 @@
+/* Additional custom styles for the Task Management Application */
+
+/* This file can be used to add extra styling if needed */
+/* Currently, all styles are inline in base.html for simplicity */
+
+/* Example: Custom button hover effects */
+.btn-custom {
+    transition: transform 0.2s ease-in-out;
+}
+
+.btn-custom:hover {
+    transform: scale(1.05);
+}
+
+/* Example: Task status colors */
+.status-completed {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.status-in-progress {
+    color: #17a2b8;
+    font-weight: bold;
+}
+
+.status-pending {
+    color: #ffc107;
+    font-weight: bold;
+}
+

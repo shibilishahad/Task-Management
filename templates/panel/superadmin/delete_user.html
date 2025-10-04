@@ -1,0 +1,35 @@
+{% extends 'panel/base.html' %}
+
+{% block title %}Delete User{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1 class="card-title">Delete User</h1>
+    
+    <a href="{% url 'superadmin_manage_users' %}" class="btn btn-warning" style="margin-bottom: 1rem;">← Back to Users</a>
+    
+    <div class="alert alert-warning">
+        <strong>Warning!</strong> Are you sure you want to delete user "{{ user.username }}"? This action cannot be undone.
+        All tasks assigned to this user will also be deleted.
+    </div>
+    
+    <p><strong>Username:</strong> {{ user.username }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+    <p><strong>Assigned Admin:</strong> 
+        {% if user.assigned_to_admin %}
+            {{ user.assigned_to_admin.username }}
+        {% else %}
+            Not Assigned
+        {% endif %}
+    </p>
+    <p><strong>Total Tasks:</strong> {{ user.tasks.count }}</p>
+    
+    <form method="POST" style="margin-top: 2rem;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Yes, Delete User</button>
+        <a href="{% url 'superadmin_manage_users' %}" class="btn btn-primary">Cancel</a>
+    </form>
+</div>
+{% endblock %}
+

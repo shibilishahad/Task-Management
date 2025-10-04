@@ -1,0 +1,35 @@
+{% extends 'panel/base.html' %}
+
+{% block title %}SuperAdmin Dashboard{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1 class="card-title">SuperAdmin Dashboard</h1>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>{{ total_admins }}</h3>
+            <p>Total Admins</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ total_users }}</h3>
+            <p>Total Users</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ total_tasks }}</h3>
+            <p>Total Tasks</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ completed_tasks }}</h3>
+            <p>Completed Tasks</p>
+        </div>
+    </div>
+    
+    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <a href="{% url 'superadmin_manage_admins' %}" class="btn btn-primary">Manage Admins</a>
+        <a href="{% url 'superadmin_manage_users' %}" class="btn btn-primary">Manage Users</a>
+        <a href="{% url 'superadmin_manage_tasks' %}" class="btn btn-primary">Manage Tasks</a>
+    </div>
+</div>
+{% endblock %}
+

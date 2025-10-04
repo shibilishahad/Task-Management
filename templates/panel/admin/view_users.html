@@ -1,0 +1,41 @@
+{% extends 'panel/base.html' %}
+
+{% block title %}My Users{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1 class="card-title">My Assigned Users</h1>
+    
+    <a href="{% url 'admin_dashboard' %}" class="btn btn-warning" style="margin-bottom: 1rem;">← Back to Dashboard</a>
+    
+    {% if users_with_counts %}
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Name</th>
+                <th>Total Tasks</th>
+                <th>Completed Tasks</th>
+                <th>Date Joined</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user_data in users_with_counts %}
+            <tr>
+                <td>{{ user_data.user.username }}</td>
+                <td>{{ user_data.user.email }}</td>
+                <td>{{ user_data.user.first_name }} {{ user_data.user.last_name }}</td>
+                <td>{{ user_data.total_tasks }}</td>
+                <td>{{ user_data.completed_tasks }}</td>
+                <td>{{ user_data.user.date_joined|date:"Y-m-d H:i" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No users assigned to you yet. Please contact a SuperAdmin to assign users to you.</p>
+    {% endif %}
+</div>
+{% endblock %}
+

@@ -1,0 +1,27 @@
+{% extends 'panel/base.html' %}
+
+{% block title %}Delete Admin{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1 class="card-title">Delete Admin</h1>
+    
+    <a href="{% url 'superadmin_manage_admins' %}" class="btn btn-warning" style="margin-bottom: 1rem;">← Back to Admins</a>
+    
+    <div class="alert alert-warning">
+        <strong>Warning!</strong> Are you sure you want to delete admin "{{ admin.username }}"? This action cannot be undone.
+    </div>
+    
+    <p><strong>Username:</strong> {{ admin.username }}</p>
+    <p><strong>Email:</strong> {{ admin.email }}</p>
+    <p><strong>Name:</strong> {{ admin.first_name }} {{ admin.last_name }}</p>
+    <p><strong>Assigned Users:</strong> {{ admin.assigned_users.count }}</p>
+    
+    <form method="POST" style="margin-top: 2rem;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Yes, Delete Admin</button>
+        <a href="{% url 'superadmin_manage_admins' %}" class="btn btn-primary">Cancel</a>
+    </form>
+</div>
+{% endblock %}
+

@@ -1,0 +1,48 @@
+{% extends 'panel/base.html' %}
+
+{% block title %}Manage Admins{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h1 class="card-title" style="margin-bottom: 0;">Manage Admins</h1>
+        <a href="{% url 'superadmin_create_admin' %}" class="btn btn-success">+ Create New Admin</a>
+    </div>
+    
+    <a href="{% url 'superadmin_dashboard' %}" class="btn btn-warning" style="margin-bottom: 1rem;">← Back to Dashboard</a>
+    
+    {% if admins %}
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Name</th>
+                <th>Date Joined</th>
+                <th>Assigned Users</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for admin in admins %}
+            <tr>
+                <td>{{ admin.username }}</td>
+                <td>{{ admin.email }}</td>
+                <td>{{ admin.first_name }} {{ admin.last_name }}</td>
+                <td>{{ admin.date_joined|date:"Y-m-d H:i" }}</td>
+                <td>{{ admin.assigned_users.count }}</td>
+                <td>
+                    <div class="actions">
+                        <a href="{% url 'superadmin_delete_admin' admin.id %}" class="btn btn-danger">Delete</a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No admins found.</p>
+    {% endif %}
+</div>
+{% endblock %}
+

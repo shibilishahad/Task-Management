@@ -1,0 +1,57 @@
+{% extends 'panel/base.html' %}
+
+{% block title %}Manage Users{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h1 class="card-title" style="margin-bottom: 0;">Manage Users</h1>
+        <a href="{% url 'superadmin_create_user' %}" class="btn btn-success">+ Create New User</a>
+    </div>
+    
+    <a href="{% url 'superadmin_dashboard' %}" class="btn btn-warning" style="margin-bottom: 1rem;">← Back to Dashboard</a>
+    
+    {% if users %}
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Name</th>
+                <th>Assigned To Admin</th>
+                <th>Tasks</th>
+                <th>Date Joined</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.first_name }} {{ user.last_name }}</td>
+                <td>
+                    {% if user.assigned_to_admin %}
+                        {{ user.assigned_to_admin.username }}
+                    {% else %}
+                        <span style="color: #999;">Not Assigned</span>
+                    {% endif %}
+                </td>
+                <td>{{ user.tasks.count }}</td>
+                <td>{{ user.date_joined|date:"Y-m-d H:i" }}</td>
+                <td>
+                    <div class="actions">
+                        <a href="{% url 'superadmin_edit_user' user.id %}" class="btn btn-primary">Edit</a>
+                        <a href="{% url 'superadmin_delete_user' user.id %}" class="btn btn-danger">Delete</a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No users found.</p>
+    {% endif %}
+</div>
+{% endblock %}
+

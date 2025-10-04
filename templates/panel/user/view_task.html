@@ -1,0 +1,479 @@
+{% extends 'panel/base.html' %}
+
+{% block title %}{{ task.title }} - Task Details{% endblock %}
+
+{% block content %}
+<div class="task-detail-container">
+    <div class="task-detail-header">
+        <div class="breadcrumb">
+            <a href="{% url 'user_dashboard' %}">Dashboard</a> > Task Details
+        </div>
+        <h1 class="task-title">{{ task.title }}</h1>
+        <div class="task-status">
+            <span class="status-badge status-{{ task.status }}">
+                {{ task.status|title }}
+            </span>
+        </div>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="task-detail-content">
+        <div class="task-main">
+            <div class="task-description">
+                <h3>Description</h3>
+                <p>{{ task.description|linebreaks }}</p>
+            </div>
+
+            {% if task.completion_report %}
+            <div class="completion-report">
+                <h3>Completion Report</h3>
+                <p>{{ task.completion_report|linebreaks }}</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="task-sidebar">
+            <div class="task-info-card">
+                <h3>Task Information</h3>
+                <div class="info-item">
+                    <strong>Assigned To:</strong>
+                    <span>{{ task.assigned_to.get_full_name|default:task.assigned_to.username }}</span>
+                </div>
+                <div class="info-item">
+                    <strong>Due Date:</strong>
+                    <span class="{% if task.due_date < today %}overdue{% endif %}">
+                        {{ task.due_date|date:"F d, Y" }}
+                    </span>
+                </div>
+                <div class="info-item">
+                    <strong>Created:</strong>
+                    <span>{{ task.created_at|date:"F d, Y" }}</span>
+                </div>
+                <div class="info-item">
+                    <strong>Last Updated:</strong>
+                    <span>{{ task.updated_at|date:"F d, Y" }}</span>
+                </div>
+                {% if task.worked_hours %}
+                <div class="info-item">
+                    <strong>Worked Hours:</strong>
+                    <span>{{ task.worked_hours }} hours</span>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="task-actions-card">
+                <h3>Actions</h3>
+                <div class="action-buttons">
+                    <a href="{% url 'user_dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+                </div>
+            </div>
+
+            {% if task.status != 'completed' %}
+            <div class="update-task-card">
+                <h3>Update Task Status</h3>
+                <form method="post" action="{% url 'user_update_task' task.id %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="status">Status:</label>
+                        <select id="status" name="status" required>
+                            <option value="pending" {% if task.status == 'pending' %}selected{% endif %}>Pending</option>
+                            <option value="in_progress" {% if task.status == 'in_progress' %}selected{% endif %}>In Progress</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group" id="completion-fields" style="display: none;">
+                        <label for="completion_report">Completion Report:</label>
+                        <textarea id="completion_report" name="completion_report" rows="4" placeholder="Describe what was accomplished..."></textarea>
+                    </div>
+                    
+                    <div class="form-group" id="hours-field" style="display: none;">
+                        <label for="worked_hours">Worked Hours:</label>
+                        <input type="number" id="worked_hours" name="worked_hours" step="0.5" min="0.5" placeholder="e.g., 5.5">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Update Task</button>
+                </form>
+            </div>
+            {% else %}
+            <div class="completed-info-card">
+                <h3>✅ Task Completed</h3>
+                <p>This task has been completed successfully!</p>
+                <div class="completion-details">
+                    <p><strong>Completed on:</strong> {{ task.updated_at|date:"F d, Y" }}</p>
+                    {% if task.worked_hours %}
+                    <p><strong>Total Hours:</strong> {{ task.worked_hours }} hours</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+.task-detail-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.task-detail-header {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #e1e5e9;
+}
+
+.breadcrumb {
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #666;
+}
+
+.breadcrumb a {
+    color: #000000;
+    text-decoration: none;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.task-title {
+    color: #333;
+    margin: 15px 0;
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.task-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.status-badge {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-in_progress {
+    background: #cce5ff;
+    color: #004085;
+}
+
+.status-completed {
+    background: #d4edda;
+    color: #155724;
+}
+
+.task-detail-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+}
+
+.task-main {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.task-description,
+.completion-report {
+    padding: 25px;
+    border-bottom: 1px solid #e1e5e9;
+}
+
+.completion-report {
+    background: #f8f9fa;
+}
+
+.task-description:last-child,
+.completion-report:last-child {
+    border-bottom: none;
+}
+
+.task-description h3,
+.completion-report h3 {
+    color: #333;
+    margin: 0 0 15px 0;
+    font-size: 20px;
+}
+
+.task-description p,
+.completion-report p {
+    color: #666;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.task-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.task-info-card,
+.task-actions-card,
+.update-task-card,
+.completed-info-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+}
+
+.task-info-card h3,
+.task-actions-card h3,
+.update-task-card h3,
+.completed-info-card h3 {
+    color: #333;
+    margin: 0 0 20px 0;
+    font-size: 18px;
+    border-bottom: 2px solid #e1e5e9;
+    padding-bottom: 10px;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f1f3f4;
+}
+
+.info-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.info-item strong {
+    color: #333;
+    font-weight: 500;
+}
+
+.info-item span {
+    color: #666;
+    text-align: right;
+}
+
+.info-item .overdue {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 500;
+    text-align: center;
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+}
+
+.btn-info {
+    background: #17a2b8;
+    color: white;
+}
+
+.btn-info:hover {
+    background: #138496;
+    transform: translateY(-2px);
+}
+
+.api-usage-card p {
+    color: #666;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.api-example {
+    margin-bottom: 15px;
+}
+
+.api-example strong {
+    color: #333;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.api-example code {
+    background: #f8f9fa;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    color: #667eea;
+    display: block;
+    border: 1px solid #e1e5e9;
+}
+
+.api-example pre {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #333;
+    border: 1px solid #e1e5e9;
+    overflow-x: auto;
+    margin: 0;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: 500;
+}
+
+.form-group select,
+.form-group textarea,
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e1e5e9;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.form-group select:focus,
+.form-group textarea:focus,
+.form-group input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.completed-info-card {
+    background: #f8f9fa;
+    border-left: 4px solid #28a745;
+}
+
+.completion-details {
+    background: white;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+.completion-details p {
+    margin: 8px 0;
+    color: #666;
+}
+
+.alert {
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+@media (max-width: 768px) {
+    .task-detail-content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .task-detail-header h1 {
+        font-size: 24px;
+    }
+    
+    .info-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .info-item span {
+        text-align: left;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const statusSelect = document.getElementById('status');
+    const completionFields = document.getElementById('completion-fields');
+    const hoursField = document.getElementById('hours-field');
+    
+    function toggleCompletionFields() {
+        if (statusSelect.value === 'completed') {
+            completionFields.style.display = 'block';
+            hoursField.style.display = 'block';
+            document.getElementById('completion_report').required = true;
+            document.getElementById('worked_hours').required = true;
+        } else {
+            completionFields.style.display = 'none';
+            hoursField.style.display = 'none';
+            document.getElementById('completion_report').required = false;
+            document.getElementById('worked_hours').required = false;
+        }
+    }
+    
+    statusSelect.addEventListener('change', toggleCompletionFields);
+    
+    // Initialize on page load
+    toggleCompletionFields();
+});
+</script>
+{% endblock %}

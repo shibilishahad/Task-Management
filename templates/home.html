@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management Application</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+        }
+        
+        .logo {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            margin: 0.5rem;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .info-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .info-section h3 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        
+        .info-section p {
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        
+        .api-link {
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        .api-link:hover {
+            text-decoration: underline;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: #d4edda;
+            color: #155724;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">📋</div>
+        <h1>Task Management Application</h1>
+        <p class="subtitle">A comprehensive task management system with role-based access control</p>
+        
+        <div class="status">✅ Server Running Successfully</div>
+        
+        <div>
+            <a href="/panel/login/" class="btn">🔐 Admin or SuperAdmin Login</a>
+            <a href="/panel/user/login/" class="btn">👤 User Login</a>
+            <a href="/api-info/" class="btn btn-secondary">📡 API Info</a>
+        </div>
+        
+        <div class="info-section">
+            <h3>🚀 Quick Start</h3>
+            <p><strong>Admin Panel:</strong> <a href="/panel/login/" class="api-link">/panel/login/</a></p>
+            <p><strong>User Login:</strong> <a href="/panel/user/login/" class="api-link">/panel/user/login/</a></p>
+            <p><strong>API Base:</strong> <a href="/api/" class="api-link">/api/</a></p>
+            
+            <h3>🔐 Test Credentials</h3>
+            <p><strong>SuperAdmin:</strong> superadmin / super123456</p>
+            <p><strong>Admin:</strong> admin1 / admin1123456</p>
+            <p><strong>User:</strong> user1 / user1123456</p>
+            
+            <h3>📚 Documentation</h3>
+            <p>Check the project files for detailed guides:</p>
+            <p>• README.md - Complete documentation</p>
+            <p>• API_TESTING_GUIDE.md - API testing examples</p>
+            <p>• QUICK_REFERENCE.md - Quick commands</p>
+        </div>
+    </div>
+</body>
+</html>

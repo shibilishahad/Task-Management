@@ -1,0 +1,53 @@
+{% extends 'panel/base.html' %}
+
+{% block title %}Create User{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1 class="card-title">Create New User</h1>
+    
+    <a href="{% url 'superadmin_manage_users' %}" class="btn btn-warning" style="margin-bottom: 1rem;">← Back to Users</a>
+    
+    <form method="POST">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="username">Username *</label>
+            <input type="text" id="username" name="username" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email *</label>
+            <input type="email" id="email" name="email" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="password">Password *</label>
+            <input type="password" id="password" name="password" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="first_name">First Name</label>
+            <input type="text" id="first_name" name="first_name" class="form-control">
+        </div>
+        
+        <div class="form-group">
+            <label for="last_name">Last Name</label>
+            <input type="text" id="last_name" name="last_name" class="form-control">
+        </div>
+        
+        <div class="form-group">
+            <label for="assigned_to_admin">Assign to Admin</label>
+            <select id="assigned_to_admin" name="assigned_to_admin" class="form-control">
+                <option value="">-- Select Admin (Optional) --</option>
+                {% for admin in admins %}
+                    <option value="{{ admin.id }}">{{ admin.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <button type="submit" class="btn btn-success">Create User</button>
+    </form>
+</div>
+{% endblock %}
+

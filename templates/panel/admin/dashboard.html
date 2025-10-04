@@ -1,0 +1,31 @@
+{% extends 'panel/base.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1 class="card-title">Admin Dashboard</h1>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>{{ total_users }}</h3>
+            <p>My Users</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ total_tasks }}</h3>
+            <p>Total Tasks</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ completed_tasks }}</h3>
+            <p>Completed Tasks</p>
+        </div>
+    </div>
+    
+    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <a href="{% url 'admin_view_users' %}" class="btn btn-primary">View My Users</a>
+        <a href="{% url 'admin_manage_tasks' %}" class="btn btn-primary">Manage Tasks</a>
+        <a href="{% url 'admin_create_task' %}" class="btn btn-success">+ Create New Task</a>
+    </div>
+</div>
+{% endblock %}
+

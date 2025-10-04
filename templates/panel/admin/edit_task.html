@@ -1,0 +1,56 @@
+{% extends 'panel/base.html' %}
+
+{% block title %}Edit Task{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1 class="card-title">Edit Task: {{ task.title }}</h1>
+    
+    <a href="{% url 'admin_manage_tasks' %}" class="btn btn-warning" style="margin-bottom: 1rem;">← Back to Tasks</a>
+    
+    <form method="POST">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="title">Task Title *</label>
+            <input type="text" id="title" name="title" value="{{ task.title }}" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="description">Description *</label>
+            <textarea id="description" name="description" class="form-control" rows="5" required>{{ task.description }}</textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="assigned_to">Assign To *</label>
+            <select id="assigned_to" name="assigned_to" class="form-control" required>
+                {% for user in users %}
+                    <option value="{{ user.id }}" {% if task.assigned_to.id == user.id %}selected{% endif %}>
+                        {{ user.username }} - {{ user.first_name }} {{ user.last_name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="due_date">Due Date *</label>
+            <input type="date" id="due_date" name="due_date" value="{{ task.due_date|date:'Y-m-d' }}" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="status">Status *</label>
+            <select id="status" name="status" class="form-control" required>
+                <option value="pending" {% if task.status == 'pending' %}selected{% endif %}>Pending</option>
+                <option value="in_progress" {% if task.status == 'in_progress' %}selected{% endif %}>In Progress</option>
+                <option value="completed" {% if task.status == 'completed' %}selected{% endif %}>Completed</option>
+            </select>
+            {% if task.status == 'completed' %}
+            <small style="color: #666;">Note: Task is already completed by the user.</small>
+            {% endif %}
+        </div>
+        
+        <button type="submit" class="btn btn-success">Update Task</button>
+    </form>
+</div>
+{% endblock %}
+
